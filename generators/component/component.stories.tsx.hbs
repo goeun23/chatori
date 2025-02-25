@@ -1,0 +1,15 @@
+import {Meta, StroyObj} from '@storybook/react';
+
+import { {{properCase name}} } from './{{properCase name}}';
+
+const meta: Meta<typeof {{ properCase name}}> = {
+    component : {{properCase name}},    
+}
+
+export default meta;
+
+type Story = StroyObj<typeof {{properCase name}}>;
+
+export const Default: Story = {
+    args : {}
+};
