@@ -4,16 +4,30 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { Button } from "flowbite-react";
 
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient, 
+  QueryClientProvider
+} from '@tanstack/react-query'
+import {getTodos, postTodo} from '../my-api'
+const queryClient = new QueryClient()
+
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+    <QueryClientProvider client={queryClient}>
       <div>
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <h1 className="text-4xl font-bold text-blue-500">Tailwind 정상 동작!</h1>
-      <p className="mt-2 text-lg text-gray-700">이 문장이 스타일이 적용된다면 성공!</p>
-    </div>
+        <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+        <h1 className="text-4xl font-bold text-blue-500">Tailwind 정상 동작!</h1>
+        <p className="mt-2 text-lg text-gray-700">이 문장이 스타일이 적용된다면 성공!</p>
+      </div>
+      <Todos />
+    </QueryClientProvider>
+    <div>
       <Button gradientDuoTone="purpleToBlue" className="mt-4">
         Flowbite 버튼 테스트
       </Button>
@@ -39,5 +53,38 @@ function App() {
     </>
   )
 }
+function Todos(){
+    const queryClient = useQueryClient()
 
+    const {query} = useQuery({
+      queryKey : ['todos'], 
+      queryFn: ()=> Promise.resolve(5), 
+      select: (data)=> data.toString(), 
+    })
+
+    const mutation = useMutation({
+      mutationFn : postTodo, 
+      onSuccess : () => {
+        queryClient.invalidateQueries({queryKey : ['todos']})
+      }
+    })
+
+    return (
+      <div>
+        <ul>{query.data?.map((todo)=> <li key={todo.id}>{todo.title}</li>)}</ul>
+      
+
+      <button
+        onClick={()=> {
+          mutation.mutate({
+            id : Date.now(), 
+            title : 'Do Laundry'
+          })
+        }}
+      >
+        Add Todo
+      </button>
+      </div>
+    )
+  }
 export default App

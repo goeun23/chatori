@@ -9,10 +9,11 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build", 
+    "build-storybook": "storybook build",
     "test": "jest"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.66.9",
     "flowbite-react": "^0.10.2",
     "github": "^14.0.0",
     "react": "^19.0.0",
