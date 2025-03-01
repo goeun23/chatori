@@ -1,1 +1,1 @@
-export * from './button-luna';
+export * from './button';
