@@ -2,16 +2,22 @@
 import {create} from 'zustand';
 import {persist} from 'zustand/middleware';
 
-interface ChatState {
-
+interface Message {
+    id: number;
+    sender : "user" | "bot";
+    text :string;
 }
 
-export const useChatStore = create<ChatState>()(
-    persist(
-        (set)=> ({
-            // 챗봇 대화 상태
-        }), 
-        {
-            name : 'chat-storage'
-        })
-)
+
+interface ChatState {
+    messages : Message[];
+    addMessage : (sender:"user" | "bot", text:string)=> void;
+}
+
+export const useChatStore = create<ChatState>((set) => ({
+  messages : [], 
+  addMessage: (sender, text) =>
+    set((state) => ({
+      messages: [...state.messages, { id: crypto.randomUUID(), sender, text }],
+    })),
+}))

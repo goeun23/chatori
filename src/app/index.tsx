@@ -17,7 +17,7 @@ import {ButtonLuna} from "@/components/ui/button"
 // google Provider 추가
 import {GoogleLoginButton} from '@/components/ui/button'
 
-
+import ChatContainer from '@/components/chat/ChatContainer';
 import {
   useQuery,
   useMutation,
@@ -80,10 +80,7 @@ export const App = () =>{
     >
       Github Repo
     </ButtonLuna>
-    <ButtonLuna variant="outline" size="icon" className="overflow-hidden rounded-full">
-      <span className='sr-only'>Open user menu</span>
-      
-    </ButtonLuna>
+    <ChatContainer/>
     <QueryClientProvider client={queryClient}>
      
         <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
