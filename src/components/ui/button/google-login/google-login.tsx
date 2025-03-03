@@ -6,7 +6,7 @@ const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string;
 import { useAuthStore } from "@/stores"; // 포함된 함수는 반드시 내부에서 호출
 export const GoogleLoginButton = ({}:{}) => {
     // 반드시 컴포넌트 내부에서 호출해야한다. 
-    const {setUser, logout} = useAuthStore();
+    const {setUser, logout, isLogin, getUser} = useAuthStore();
 
     const onLoginSuccess = (crenditalResponse: any) => {
 
@@ -28,17 +28,23 @@ export const GoogleLoginButton = ({}:{}) => {
         logout();
     }
 
+    const name:string = getUser()?.name;
+
+    const renderedLoginButton = isLogin ? 
+        (<div><h4>hi, {name}!</h4>
+            <button onClick={()=> handleLogout()}>로그아웃</button>
+        </div>)
+     :(<GoogleLogin 
+     onSuccess={onLoginSuccess}
+     onError={onLoginError}/>);
+    
     return (
         <div>
-            <GoogleOAuthProvider
-                clientId={CLIENT_ID}
-            >
-                <GoogleLogin 
-                    onSuccess={onLoginSuccess}
-                    onError={onLoginError}
-                />
+            <GoogleOAuthProvider clientId={CLIENT_ID}>
+                {renderedLoginButton}
             </GoogleOAuthProvider>
-            <button onClick={()=> handleLogout()}>로그아웃</button>
+            
+            
         </div>
     )
 }

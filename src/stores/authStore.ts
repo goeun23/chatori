@@ -26,7 +26,8 @@ export const useAuthStore = create<AuthState>()(
         (set, get)=> (
             {
             user : null, 
-            token : null, 
+            token : null,
+            isLogin: false,
             setUser: (user, token) => set({user, token, isLogin : true}), // 로그인 상태 업데이트
             getUser: ()=> get().user, 
             getIsLogin : () => get().isLogin, 

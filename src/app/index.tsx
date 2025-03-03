@@ -52,13 +52,15 @@ export const App = () =>{
   }else{
     // <GoogleLoginButton isLogin={isLogin} /> <- hook을 직접 전달하려고 했음
     // hook으로 해당 값을 전달하지말고, 컴포넌트에 직접 작성하고, 모든 로직을 그 안에서 처리해야한다. 
-    loginButton = <GoogleLoginButton isLogin/>
+    // -> 컴포넌트 내부에서 hook을 사용하고, hook을 통해 상태를 변경하고, 상태에 따라 컴포넌트를 렌더링한다.
+    // zustand 에서는 상태가 변경되면 이를 직접 감지하기 때문에 vue-watch 같은걸 쓸 필요가 없다. 
+    //loginButton = <GoogleLoginButton isLogin/>
   }
 
   return (
     <>
-    
-    {loginButton}
+    <GoogleLoginButton/>
+    {/* {loginButton} */}
     
     <ButtonLuna
       variant="outline"
