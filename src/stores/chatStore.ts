@@ -4,20 +4,20 @@ import {persist} from 'zustand/middleware';
 
 interface Message {
     id: number;
-    sender : "user" | "bot";
-    text :string;
+    sender : "user" | "assistant";
+    content :string;
 }
 
 
 interface ChatState {
     messages : Message[];
-    addMessage : (sender:"user" | "bot", text:string)=> void;
+    addMessage : (sender:"user" | "assistant", text:string)=> void;
 }
 
 export const useChatStore = create<ChatState>((set) => ({
   messages : [], 
-  addMessage: (sender, text) =>
+  addMessage: (role, content) =>
     set((state) => ({
-      messages: [...state.messages, { id: crypto.randomUUID(), sender, text }],
+      messages: [...state.messages, { id: crypto.randomUUID(), role, content }],
     })),
 }))

@@ -16,7 +16,7 @@ const MessageList = () => {
                 <div 
                     key={message.id} 
                     className={`p-2 rounded ${message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
-                    {message.text}
+                    {message.content} ({message.sender})
                 </div>
             ))}
             <div ref={messageEndRef} />

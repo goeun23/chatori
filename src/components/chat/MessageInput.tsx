@@ -1,20 +1,24 @@
 import React, {useState} from "react";
 import { useChatStore } from "@/stores";
 import {Button} from "flowbite-react";
+import { useChatQuery } from "@/hooks/useChatQuery";
 const MessageInput = () => {
     const [input, setInput] = useState('');
     const addMessage = useChatStore((state) => state.addMessage);
+    const chatMutation = useChatQuery();
 
     const handleSend = () => {
-        if(input.trim()){
-            addMessage("user", input);
-            setInput('');
+        if(!input.trim()){
+            return;
+            
         }
 
-        // 더미 챗봇 응답 추가(api 호출 대신)
-        setTimeout(()=> {
-            addMessage("bot", "안녕하세요! 무엇을 도와드릴까요?");
-        }, 1000)
+        // 사용자 메세지 추가
+        addMessage('user', input);
+
+        chatMutation.mutate([{ role: "user", content: input }]);
+
+        setInput('');
     };
 
 
