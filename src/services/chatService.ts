@@ -14,10 +14,21 @@ export const fetchChatbotResponse = async (messages: { role: string; content: st
         const result = await model.generateContent(prompt);
         const response = await result.response;
         const text = response.text();
-        console.log(text)
+        
         return text;
       } catch (error) {
         console.error("Gemini API 호출 실패:", error);
         throw error;
       }
 };
+
+export const saveChatHistory = async (message:string) => {
+  localStorage.setItem("chat_history", JSON.stringify(message));
+}
+
+export const loadChatHistory = async () => {
+  const storedMessages = localStorage.getItem("chat_history");
+  return storedMessages ? JSON.parse(storedMessages) : [];
+}
+
+

@@ -29,10 +29,12 @@ import {getTodos, postTodo} from '../my-api'
 const queryClient = new QueryClient();
 
 import { useAuthStore } from '@/stores';
+import { useLoadChatHistory } from '../hooks/useChatQuery';
 
 export const App = () =>{
   const {isLogin, getUser} = useAuthStore();
   const user = getUser();
+  useLoadChatHistory();
   const name:string = user;
   // const {name}:string = user; <- 잘못된 문법! 
   // ㄴ 오류 발생. 구조분해할당시 변수 자체에 타입을 지정하는 것이 아니라, user 객체의 타입을 지정해야한다.
@@ -60,7 +62,9 @@ export const App = () =>{
     <>
       <GoogleLoginButton/>
       <QueryClientProvider client={queryClient}>
-        <ChatContainer/>        
+        <div className="flex justify-center items-center h-screen bg-gray-100">
+          <ChatContainer />
+        </div>
       </QueryClientProvider>  
     </>
   )
