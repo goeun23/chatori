@@ -15,8 +15,8 @@ const MessageList = () => {
             {messages.map((message:string) => (
                 <div 
                     key={message.id} 
-                    className={`p-2 rounded ${message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
-                    {message.content} ({message.sender})
+                    className={`p-2 rounded ${message.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
+                    {message.content} ({message.role})
                 </div>
             ))}
             <div ref={messageEndRef} />

@@ -5,35 +5,38 @@ import { loadChatHistory, saveChatHistory } from "../services/chatService";
 
 // 대화내역불러오기
 export const useLoadChatHistory = () => {
-  const addMessage = useChatStore((state)=> state.addMessage);
+  const addMessage = useChatStore((state: any) => state.addMessage);
   return useQuery({
-    queryKey : ["chatHistory"], 
-    queryFn : async () => {
+    queryKey: ["chatHistory"], 
+    queryFn: async () => {
       const messages = await loadChatHistory();
-      messages.forEach((msg)=> addMessage(msg.role, msg.content));
+      if (Array.isArray(messages)) {
+        messages.forEach((msg: any) => {
+          if (msg.role && msg.content) {
+            addMessage(msg.role, msg.content);
+          }
+        });
+      }
       return messages;
     }, 
-    staleTime : 100* 60 *5 , // 5분동안 캐싱 유지지
-  })
-}
+    staleTime: 100 * 60 * 5, // 5분동안 캐싱 유지
+  });
+};
 
 // 대화내역저장하기
 export const useSaveChatHitory = () => {
   return useMutation({
-    mutationFn:saveChatHistory,
-  })
-}
-
-
-
+    mutationFn: (messages: any) => saveChatHistory(messages),
+  });
+};
 
 export const useChatQuery = () => {
-  const addMessage = useChatStore((state) => state.addMessage);
+  const addMessage = useChatStore((state: any) => state.addMessage);
 
   return useMutation({
-    mutationFn: fetchChatbotResponse, // ✅ 올바른 문법 (mutationFn 명확히 지정)
+    mutationFn: fetchChatbotResponse,
     onSuccess: (data) => {
-      addMessage("assistant", data); // ✅ 챗봇 응답 추가
+      addMessage("assistant", data);
     },
     onError: (error) => {
       console.error("챗봇 응답 실패:", error);

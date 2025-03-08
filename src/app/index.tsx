@@ -13,25 +13,36 @@ import { useState } from 'react'
 import '../App.css'
 import { Button } from "flowbite-react";
 import {ButtonLuna} from "@/components/ui/button" 
-
-// google Provider 추가
 import {GoogleLoginButton} from '@/components/ui/button'
-
 import ChatContainer from '@/components/chat/ChatContainer';
 import {
-  useQuery,
-  useMutation,
-  useQueryClient,
   QueryClient, 
   QueryClientProvider
 } from '@tanstack/react-query'
-import {getTodos, postTodo} from '../my-api'
-const queryClient = new QueryClient();
-
 import { useAuthStore } from '@/stores';
 import { useLoadChatHistory } from '../hooks/useChatQuery';
+import { Suspense } from 'react';
 
-export const App = () =>{
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: false
+    }
+  }
+});
+
+export const App = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <QueryClientProvider client={queryClient}>
+        <AppContent />
+      </QueryClientProvider>
+    </Suspense>
+  )
+}
+
+const AppContent = () => {
   const {isLogin, getUser} = useAuthStore();
   const user = getUser();
   useLoadChatHistory();
@@ -61,17 +72,12 @@ export const App = () =>{
   return (
     <>
       <GoogleLoginButton/>
-      <QueryClientProvider client={queryClient}>
-        <div className="flex justify-center items-center h-screen bg-gray-100">
-          <ChatContainer />
-        </div>
-      </QueryClientProvider>  
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+        <ChatContainer />
+      </div>
     </>
   )
 }
-
-
-
 
 /**
  * 전역 상태 관리 : appProvider와 그 허ㅏ위 컴포넌트들이 React Query를 통해 서버 관리를 쉽게 할 수 있음

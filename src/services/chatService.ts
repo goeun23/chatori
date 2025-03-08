@@ -22,8 +22,8 @@ export const fetchChatbotResponse = async (messages: { role: string; content: st
       }
 };
 
-export const saveChatHistory = async (message:string) => {
-  localStorage.setItem("chat_history", JSON.stringify(message));
+export const saveChatHistory = async (messages: any) => {
+  localStorage.setItem("chat_history", JSON.stringify(messages));
 }
 
 export const loadChatHistory = async () => {
