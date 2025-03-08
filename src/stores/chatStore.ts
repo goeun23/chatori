@@ -6,13 +6,16 @@ import {persist} from 'zustand/middleware';
 
 interface Message {
     id: string | number;
+    
     role: "user" | "assistant";
     content: string;
 }
 
 interface ChatState {
     messages: Message[];
+    isBotTyping:boolean;
     addMessage: (role: "user" | "assistant", content: string) => void;
+    setIsBotTyping:(isTyping:boolean)=> void;
 }
 
 // persist 미들웨어를 사용하여 로컬 스토리지에 상태 저장
@@ -27,7 +30,12 @@ export const useChatStore = create<ChatState>()(
           localStorage.setItem("chat_history", JSON.stringify(updatedMessages));
           return {messages: updatedMessages};
         }),
+      
+      setIsBotTyping: (isTyping:boolean) => set({
+          isBotTyping :isTyping, 
+        })
     }),
+    
     {
       name: 'chat-storage', // 로컬 스토리지 키 이름
     }

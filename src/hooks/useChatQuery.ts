@@ -32,14 +32,19 @@ export const useSaveChatHitory = () => {
 
 export const useChatQuery = () => {
   const addMessage = useChatStore((state: any) => state.addMessage);
-
+  const setIsBotTyping = useChatStore((state)=> state.setIsBotTyping);
   return useMutation({
     mutationFn: fetchChatbotResponse,
+    onMutate: () => {
+      setIsBotTyping(true);
+    }, 
     onSuccess: (data) => {
       addMessage("assistant", data);
+      setIsBotTyping(false);
     },
     onError: (error) => {
       console.error("챗봇 응답 실패:", error);
+      setIsBotTyping(false);
     },
   });
 };
