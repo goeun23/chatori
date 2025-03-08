@@ -9,33 +9,42 @@ interface Message {
     
     role: "user" | "assistant";
     content: string;
+    timestamp?: Date;
 }
 
 interface ChatState {
     messages: Message[];
-    isBotTyping:boolean;
+    isBotTyping: boolean;
     addMessage: (role: "user" | "assistant", content: string) => void;
-    setIsBotTyping:(isTyping:boolean)=> void;
+    setIsBotTyping: (isTyping: boolean) => void;
 }
+
+// 로컬 스토리지 초기화 (문제 해결을 위해)
+localStorage.removeItem('chat-storage');
+localStorage.removeItem('chat_history');
 
 // persist 미들웨어를 사용하여 로컬 스토리지에 상태 저장
 export const useChatStore = create<ChatState>()(
   persist(
     (set) => ({
       messages: [],
+      isBotTyping: false,
       addMessage: (role, content) =>
         set((state) => {
-          const updatedMessages = [...state.messages, {id: crypto.randomUUID(), role, content}];
-          // 훅 호출 대신 로컬 스토리지에 직접 저장
-          localStorage.setItem("chat_history", JSON.stringify(updatedMessages));
+          const updatedMessages = [...state.messages, {
+            id: crypto.randomUUID(), 
+            role, 
+            content,
+            timestamp: new Date()
+          }];
           return {messages: updatedMessages};
         }),
       
-      setIsBotTyping: (isTyping:boolean) => set({
-          isBotTyping :isTyping, 
-        })
+      setIsBotTyping: (isTyping: boolean) => set({
+        isBotTyping: isTyping, 
+      }),
+        
     }),
-    
     {
       name: 'chat-storage', // 로컬 스토리지 키 이름
     }

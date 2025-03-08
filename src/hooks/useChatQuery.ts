@@ -9,17 +9,28 @@ export const useLoadChatHistory = () => {
   return useQuery({
     queryKey: ["chatHistory"], 
     queryFn: async () => {
-      const messages = await loadChatHistory();
-      if (Array.isArray(messages)) {
-        messages.forEach((msg: any) => {
-          if (msg.role && msg.content) {
-            addMessage(msg.role, msg.content);
+      try {
+        const messages = await loadChatHistory();
+        if (Array.isArray(messages) && messages.length > 0) {
+          // 기존 메시지를 모두 지우고 새로 추가하는 대신, 
+          // 메시지가 없을 때만 추가하도록 수정
+          const currentMessages = useChatStore.getState().messages;
+          if (currentMessages.length === 0) {
+            messages.forEach((msg: any) => {
+              if (msg.role && msg.content) {
+                addMessage(msg.role, msg.content);
+              }
+            });
           }
-        });
+        }
+        return messages;
+      } catch (error) {
+        console.error("채팅 기록 로딩 실패:", error);
+        return [];
       }
-      return messages;
     }, 
     staleTime: 100 * 60 * 5, // 5분동안 캐싱 유지
+    retry: false, // 실패 시 재시도 안함
   });
 };
 
@@ -32,12 +43,13 @@ export const useSaveChatHitory = () => {
 
 export const useChatQuery = () => {
   const addMessage = useChatStore((state: any) => state.addMessage);
-  const setIsBotTyping = useChatStore((state)=> state.setIsBotTyping);
+  const setIsBotTyping = useChatStore((state: any) => state.setIsBotTyping);
+  
   return useMutation({
     mutationFn: fetchChatbotResponse,
     onMutate: () => {
       setIsBotTyping(true);
-    }, 
+    },
     onSuccess: (data) => {
       addMessage("assistant", data);
       setIsBotTyping(false);
