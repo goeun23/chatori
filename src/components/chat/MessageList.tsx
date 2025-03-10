@@ -62,7 +62,7 @@ const MessageList = () => {
         <div className="flex flex-col gap-4">
             {messages.length === 0 && messageGroups.length === 0 && (
                 <div className="text-center text-gray-500 py-8">
-                    <p>대화를 시작해보세요!</p>
+                    <p>로그인 후 대화 기록이 저장됩니다.</p>
                 </div>
             )}
             

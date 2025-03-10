@@ -12,13 +12,9 @@
 import { useState } from 'react'
 import '../App.css'
 import { Button } from "flowbite-react";
-import {ButtonLuna} from "@/components/ui/button" 
 import {GoogleLoginButton} from '@/components/ui/button'
 import ChatContainer from '@/components/chat/ChatContainer';
-import {
-  QueryClient, 
-  QueryClientProvider
-} from '@tanstack/react-query'
+import {QueryClient,   QueryClientProvider} from '@tanstack/react-query'
 import { useAuthStore } from '@/stores';
 import { useLoadChatHistory } from '../hooks/useChatQuery';
 import { Suspense } from 'react';
@@ -45,15 +41,13 @@ export const App = () => {
 }
 
 const MessengerLayout = () => {
-  const {isLogin, getUser} = useAuthStore();
-  const user = getUser();
   useLoadChatHistory();
   
   return (
     <div className="container mx-auto p-4 h-screen flex flex-col">
       <header className="bg-blue-600 text-white p-3 rounded-t-lg shadow-md flex justify-between items-center">
         <div className="flex items-center">
-          <div className="text-xl font-bold">챗돌이 메신저</div>
+          <div className="text-xl font-bold">chatori</div>
         </div>
         <div>
           <GoogleLoginButton />

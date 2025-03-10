@@ -26,20 +26,7 @@ const ChatContainer = () => {
                         </p>
                     </div>
                 </div>
-                <div className="flex space-x-2">
-                    <Button color="light" size="sm" pill>
-                        <HiPhone className="h-4 w-4" />
-                    </Button>
-                    <Button color="light" size="sm" pill>
-                        <HiVideoCamera className="h-4 w-4" />
-                    </Button>
-                    <Button color="light" size="sm" pill>
-                        <HiInformationCircle className="h-4 w-4" />
-                    </Button>
-                    <Button color="light" size="sm" pill>
-                        <HiDotsVertical className="h-4 w-4" />
-                    </Button>
-                </div>
+                
             </div>
             
             {/* 채팅 내용 */}

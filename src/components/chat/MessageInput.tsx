@@ -2,10 +2,11 @@ import React, {useState} from "react";
 import { useChatStore } from "@/stores";
 import { Button } from "flowbite-react";
 import { useChatQuery } from "@/hooks/useChatQuery";
-import { HiPaperAirplane, HiPhotograph, HiEmojiHappy, HiMicrophone, HiPaperClip } from "react-icons/hi";
+import { HiPaperAirplane, HiPhotograph, HiEmojiHappy, HiPaperClip } from "react-icons/hi";
 
 const MessageInput = () => {
     const [input, setInput] = useState('');
+    // input은 현재 상태, setInput은 상태를 업데이트하는 함수
     const addMessage = useChatStore((state) => state.addMessage);
     const isBotTyping = useChatStore((state) => state.isBotTyping);
     const chatMutation = useChatQuery();
@@ -18,7 +19,7 @@ const MessageInput = () => {
         // 사용자 메세지 추가
         addMessage('user', input);
         chatMutation.mutate([{ role: "user", content: input }]);
-        setInput('');
+        setInput(''); // 상태 업데이트
     };
 
     return (
@@ -33,9 +34,7 @@ const MessageInput = () => {
                 <Button color="light" size="xs" pill>
                     <HiPaperClip className="h-4 w-4" />
                 </Button>
-                <Button color="light" size="xs" pill>
-                    <HiMicrophone className="h-4 w-4" />
-                </Button>
+                
             </div>
             
             <div className="flex items-center gap-2">
@@ -49,7 +48,7 @@ const MessageInput = () => {
                         }
                     }}
                     className="flex-1 p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                    placeholder="메시지를 입력하세요... (Shift+Enter로 줄바꿈)"
+                    placeholder="메시지를 입력하세요! (Shift+Enter로 줄바꿈)"
                     disabled={isBotTyping}
                     rows={2}
                 />
