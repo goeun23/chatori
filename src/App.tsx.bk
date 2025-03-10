@@ -5,6 +5,11 @@ import './App.css'
 import { Button } from "flowbite-react";
 import {ButtonLuna} from "@/components/ui/button" 
 
+// google Provider 추가
+import {GoogleOAuthProvider } from '@react-oauth/google';
+import {GoogleLoginButton} from '@/components/ui/button'
+const CLIENT_ID = '362797438144-71169u53r8l8lck8d6hujdrop1hhs988.apps.googleusercontent.com';
+
 
 import {
   useQuery,
@@ -21,7 +26,12 @@ function App() {
 
   return (
     <>
-    <Button>Click me</Button>;
+    <GoogleOAuthProvider
+      clientId={CLIENT_ID}
+    >
+      <GoogleLoginButton>구글계정으로 로그인</GoogleLoginButton>
+    </GoogleOAuthProvider >
+    
     <ButtonLuna
       variant="outline"
       icon = {
