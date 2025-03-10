@@ -15,7 +15,7 @@ import { Button } from "flowbite-react";
 import {GoogleLoginButton} from '@/components/ui/button'
 import ChatContainer from '@/components/chat/ChatContainer';
 import {QueryClient,   QueryClientProvider} from '@tanstack/react-query'
-import { useAuthStore } from '@/stores';
+
 import { useLoadChatHistory } from '../hooks/useChatQuery';
 import { Suspense } from 'react';
 
