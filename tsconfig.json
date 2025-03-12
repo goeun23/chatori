@@ -5,6 +5,8 @@
     { "path": "./tsconfig.node.json" }, 
   ], 
   "compilerOptions": {
+    "jsx": "react",
+    "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
