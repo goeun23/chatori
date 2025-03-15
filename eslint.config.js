@@ -45,6 +45,9 @@ export default [
         'plugin:vitest/legacy-recommended',
       ],
       rules: {
+        'indent': ['error', 2],  // 들여쓰기 2칸 설정
+        'no-trailing-spaces': 'error',  // 줄 끝 공백 제거
+        'eol-last': ['error', 'always'],  // 파일 끝에 빈 줄 추가
         'import/no-restricted-paths': [
           'error',
           {
