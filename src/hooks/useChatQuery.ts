@@ -9,7 +9,7 @@ import { useAuthStore } from '@/stores/authStore';
 export const useLoadChatHistory = () => {
   const addMessage = useChatStore((state: any) => state.addMessage);
   const isLogin = useAuthStore((state: any) => state.isLogin);
-  console.log(isLogin);
+
   return useQuery({
     queryKey: ['chatHistory'], // 쿼리 키
     queryFn: async () => {

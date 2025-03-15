@@ -38,6 +38,7 @@ const MessageInput = () => {
 
       <div className="flex items-center gap-2">
         <textarea
+          data-testid="message-input"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
