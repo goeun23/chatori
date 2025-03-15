@@ -1,46 +1,43 @@
 // 로그인 상태 관리
 
-import {create} from 'zustand';
+import { create } from 'zustand';
 
-import {persist} from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 
 interface User {
-    name : string, 
-    email : string
+  name: string;
+  email: string;
 }
 
 interface AuthState {
-    user: User | null;
-    isLogin : boolean;
-    token: string | null;
-    setUser: (user: User, token: string) => void;
-    getUser: () => User | null;
-    logout: () => void;
+  user: User | null;
+  isLogin: boolean;
+  token: string | null;
+  setUser: (user: User, token: string) => void;
+  getUser: () => User | null;
+  logout: () => void;
 }
-
-
 
 // local storage에 저장하여 새로고침해도 로그인 상태 유지
 export const useAuthStore = create<AuthState>()(
-    persist(
-        (set, get)=> (
-            {
-            user : null, 
-            token : null,
-            isLogin: false,
-            setUser: (user, token) => set({user, token, isLLogin : true}), // 로그인 상태 업데이트
-            getUser: ()=> get().user, 
-            getIsLogin : () => get().isLogin, 
-            logout: () => set({user : null, token : null, isLogin:false})// 로그아웃시 상태 초기화
-        }), 
-        
-        {
-            name : 'auth-storage' // local storage에 저장될 이름
-        }
-    )
-)
+  persist(
+    (set, get) => ({
+      user: null,
+      token: null,
+      isLogin: false,
+      setUser: (user, token) => set({ user, token, isLogin: true }), // 로그인 상태 업데이트
+      getUser: () => get().user,
+      getIsLogin: () => get().isLogin,
+      logout: () => set({ user: null, token: null, isLogin: false }), // 로그아웃시 상태 초기화
+    }),
 
-// persist를 사용하지않으면 페이지를 새로고침하면 데이터가 사라진다. 
+    {
+      name: 'auth-storage', // local storage에 저장될 이름
+    }
+  )
+);
+
+// persist를 사용하지않으면 페이지를 새로고침하면 데이터가 사라진다.
 // 그런데 반드시 로컬에 저장하지않고, 휘발되어도 되는 데이터를 저장할 경우
 /**
  * 미들웨어인 persist를 사용하지않고 데이터를 저장한다.
@@ -58,7 +55,7 @@ export const useAuthStore = create<AuthState>()(
  * 장바구니, 찜목록(사용자가 로그인 상태에서도 유지해야 하는 데이터)
  * 사용자가 작성중인 글, 댓글(사용자가 로그인 상태에서도 유지해야 하는 데이터)
  * 네트워크 요청 결과(캐시된 데이터)
- * 불필요한 데이터까지 저장하면 브라우저 저장 공간을 차지할 수 있음. 
+ * 불필요한 데이터까지 저장하면 브라우저 저장 공간을 차지할 수 있음.
  */
 
 /**
