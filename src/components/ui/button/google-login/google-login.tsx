@@ -4,12 +4,20 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 //const {setUser, logout} = useAuthStore(); 컴포넌트 밖에서 호출하면 안된다.
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string;
+
 import { useAuthStore } from "@/stores"; // 포함된 함수는 반드시 내부에서 호출
+import { useEffect } from "react";
 
 export const GoogleLoginButton = ({}: {}) => {
   // 반드시 컴포넌트 내부에서 호출해야한다.
   const { setUser, logout, isLogin, getUser } = useAuthStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLogin) {
+      navigate("/messenger");
+    }
+  }, [isLogin, navigate]); // isLogin 상태가 변경될 때만 실행
 
   const onLoginSuccess = (crenditalResponse: any) => {
     const jwt_token = crenditalResponse.credential;
@@ -19,7 +27,7 @@ export const GoogleLoginButton = ({}: {}) => {
     setUser({ name, email }, jwt_token);
 
     // 로그인 성공 후 /messenger 페이지로 이동
-    navigate("/messenger");
+    ///navigate("/messenger");  -> 상태가 업데이트되면 useEffect가 실행되어 자동으로 이동됨됨
   };
 
   const onLoginError = () => {
@@ -30,7 +38,7 @@ export const GoogleLoginButton = ({}: {}) => {
   const handleLogout = () => {
     googleLogout();
     logout();
-    navigate("/");
+    navigate("/"); // 로그아웃시 홈으로 이동동
   };
 
   const name: string = getUser()?.name || "";
