@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useChatStore } from '@/stores';
-import { Button } from 'flowbite-react';
-import { useChatQuery } from '@/hooks/useChatQuery';
-import { HiPaperAirplane, HiPhotograph, HiEmojiHappy, HiPaperClip } from 'react-icons/hi';
+import React, {useState} from "react";
+import { useChatStore } from "@/stores";
+import { Button } from "flowbite-react";
+import { useChatQuery } from "@/hooks/useChatQuery";
+import { HiPaperAirplane, HiPhotograph, HiEmojiHappy, HiPaperClip } from "react-icons/hi";
 
 const MessageInput = () => {
   const [input, setInput] = useState('');
@@ -11,6 +11,10 @@ const MessageInput = () => {
   const isBotTyping = useChatStore((state) => state.isBotTyping);
   const chatMutation = useChatQuery();
 
+  const handleSend = () => {
+    if (!input.trim() || isBotTyping) {
+      return;
+    }
   const handleSend = () => {
     if (!input.trim() || isBotTyping) {
       return;
@@ -62,4 +66,3 @@ const MessageInput = () => {
   );
 };
 
-export default MessageInput;

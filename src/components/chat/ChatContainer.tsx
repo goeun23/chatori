@@ -1,11 +1,10 @@
-import React from 'react';
-import MessageList from './MessageList';
-import MessageInput from './MessageInput';
-import { useChatStore } from '@/stores';
-import { Button } from 'flowbite-react';
-import { HiDotsVertical, HiPhone, HiVideoCamera, HiInformationCircle } from 'react-icons/hi';
+import React from "react";
+import MessageList from "./MessageList";
+import { MessageInput } from "@/components/chat";
+import { useChatStore } from "@/stores";
+import { Button } from "flowbite-react";
 
-const ChatContainer = () => {
+export const ChatContainer = () => {
   const isBotTyping = useChatStore((state) => state.isBotTyping);
 
   return (
@@ -19,13 +18,15 @@ const ChatContainer = () => {
             </div>
             <span
               className={`absolute bottom-0 right-0 w-3 h-3 rounded-full ${
-                isBotTyping ? 'bg-yellow-500' : 'bg-green-500'
+                isBotTyping ? "bg-yellow-500" : "bg-green-500"
               } border-2 border-white`}
             ></span>
           </div>
           <div>
             <h5 className="font-bold">챗돌이</h5>
-            <p className="text-xs text-gray-500">{isBotTyping ? '입력 중...' : '온라인'}</p>
+            <p className="text-xs text-gray-500">
+              {isBotTyping ? "입력 중..." : "온라인"}
+            </p>
           </div>
         </div>
       </div>

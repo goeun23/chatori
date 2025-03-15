@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useChatStore } from '@/stores';
 import { Spinner } from 'flowbite-react';
 
-const MessageList = () => {
+export const MessageList = () => {
   const messages = useChatStore((state) => state.messages);
   const isBotTyping = useChatStore((state) => state.isBotTyping);
   const messageEndRef = useRef<HTMLDivElement>(null);
@@ -34,7 +34,12 @@ const MessageList = () => {
               content: '안녕하세요! 무엇을 도와드릴까요?',
               timestamp: new Date(),
             },
-            { id: 2, role: 'user', content: '안녕하세요! 반가워요.', timestamp: new Date() },
+            {
+              id: 2,
+              role: 'user',
+              content: '안녕하세요! 반가워요.',
+              timestamp: new Date(),
+            },
             {
               id: 3,
               role: 'assistant',
