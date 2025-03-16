@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useChatStore } from "@/stores";
 import { Spinner } from "flowbite-react";
-
 export const MessageList = () => {
   const messages = useChatStore((state) => state.messages);
   const isBotTyping = useChatStore((state) => state.isBotTyping);
@@ -21,32 +20,11 @@ export const MessageList = () => {
   const groupMessagesByDate = () => {
     const groups: { date: string; messages: any[] }[] = [];
 
+    // 메시지가 없는 경우 빈 배열 반환
     if (messages.length === 0) return groups;
 
-    // 실제 메시지가 없는 경우 샘플 메시지 추가
-    const messagesToUse =
-      messages.length > 0
-        ? messages
-        : [
-            {
-              id: 1,
-              role: "assistant",
-              content: "안녕하세요! 무엇을 도와드릴까요?",
-              timestamp: new Date(),
-            },
-            {
-              id: 2,
-              role: "user",
-              content: "안녕하세요! 반가워요.",
-              timestamp: new Date(),
-            },
-            {
-              id: 3,
-              role: "assistant",
-              content: "오늘 무엇을 도와드릴까요?",
-              timestamp: new Date(),
-            },
-          ];
+    // 실제 메시지만 사용
+    const messagesToUse = messages;
 
     let currentDate = new Date(
       messagesToUse[0].timestamp || new Date()
@@ -82,7 +60,7 @@ export const MessageList = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      {messages.length === 0 && messageGroups.length === 0 && (
+      {messages.length === 0 && (
         <div className="text-center text-gray-500 py-8">
           <p>로그인 후 대화 기록이 저장됩니다.</p>
         </div>

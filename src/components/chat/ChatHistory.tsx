@@ -1,11 +1,30 @@
 import { Button } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getChatHistory } from "@/feature/api/chat";
+
+// 채팅 응답 타입 정의
+interface ChatResponse {
+  success: boolean;
+  data: Array<{
+    seq: string;
+    title: string;
+  }>;
+  total: number;
+}
+
+// 채팅방 타입 정의
+interface ChatRoom {
+  id: string | number;
+  name: string;
+  lastMessage: string;
+  time: string;
+  unread: number;
+}
 
 // 채팅 목록 컴포넌트
 export const ChatHistory = () => {
   const [activeChat, setActiveChat] = useState("챗돌이");
-
-  const chatRooms = [
+  const [chatRooms, setChatRooms] = useState<ChatRoom[]>([
     {
       id: 1,
       name: "챗돌이",
@@ -13,28 +32,43 @@ export const ChatHistory = () => {
       time: "지금",
       unread: 0,
     },
-    {
-      id: 2,
-      name: "개인 메모",
-      lastMessage: "여기에 메모를 저장할 수 있어요",
-      time: "어제",
-      unread: 2,
-    },
-    {
-      id: 3,
-      name: "코딩 도우미",
-      lastMessage: "코드 작성을 도와드립니다",
-      time: "2일 전",
-      unread: 0,
-    },
-    {
-      id: 4,
-      name: "영어 선생님",
-      lastMessage: "How can I help you today?",
-      time: "1주일 전",
-      unread: 0,
-    },
-  ];
+  ]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // API에서 채팅 기록 가져오기
+  useEffect(() => {
+    const fetchChatHistory = async () => {
+      try {
+        setLoading(true);
+        const response = await getChatHistory();
+        console.log("API 응답:", response);
+
+        // API 응답 구조 확인
+        const responseData = response as unknown as ChatResponse;
+
+        if (responseData.success && responseData.data) {
+          // API 응답 데이터를 컴포넌트에서 사용하는 형식으로 변환
+          const formattedChats = responseData.data.map((chat, index) => ({
+            id: chat.seq || index + 1,
+            name: chat.title || `채팅 ${index + 1}`,
+            lastMessage: "새로운 대화를 시작하세요",
+            time: "방금",
+            unread: 0,
+          }));
+
+          setChatRooms(formattedChats);
+        }
+      } catch (err) {
+        console.error("채팅 기록 가져오기 오류:", err);
+        setError("채팅 기록을 불러오는 중 오류가 발생했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchChatHistory();
+  }, []);
 
   return (
     <div className="h-full flex flex-col">
@@ -62,30 +96,40 @@ export const ChatHistory = () => {
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        {chatRooms.map((chat) => (
-          <div
-            key={chat.id}
-            className={`p-3 border-b hover:bg-gray-100 cursor-pointer ${
-              activeChat === chat.name ? "bg-blue-50" : ""
-            }`}
-            onClick={() => setActiveChat(chat.name)}
-          >
-            <div className="flex justify-between items-start">
-              <div className="font-medium">{chat.name}</div>
-              <div className="text-xs text-gray-500">{chat.time}</div>
-            </div>
-            <div className="flex justify-between items-center mt-1">
-              <div className="text-sm text-gray-600 truncate w-40">
-                {chat.lastMessage}
-              </div>
-              {chat.unread > 0 && (
-                <div className="bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {chat.unread}
-                </div>
-              )}
-            </div>
+        {loading ? (
+          <div className="p-4 text-center text-gray-500">로딩 중...</div>
+        ) : error ? (
+          <div className="p-4 text-center text-red-500">{error}</div>
+        ) : chatRooms.length === 0 ? (
+          <div className="p-4 text-center text-gray-500">
+            대화방이 없습니다.
           </div>
-        ))}
+        ) : (
+          chatRooms.map((chat) => (
+            <div
+              key={chat.id}
+              className={`p-3 border-b hover:bg-gray-100 cursor-pointer ${
+                activeChat === chat.name ? "bg-blue-50" : ""
+              }`}
+              onClick={() => setActiveChat(chat.name)}
+            >
+              <div className="flex justify-between items-start">
+                <div className="font-medium">{chat.name}</div>
+                <div className="text-xs text-gray-500">{chat.time}</div>
+              </div>
+              <div className="flex justify-between items-center mt-1">
+                <div className="text-sm text-gray-600 truncate w-40">
+                  {chat.lastMessage}
+                </div>
+                {chat.unread > 0 && (
+                  <div className="bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {chat.unread}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       <div className="p-3 border-t">
